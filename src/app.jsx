@@ -10,11 +10,13 @@ const App = () => {
   };
 
   const handleToggleBookMark = (id) => {
-    const index = users.findIndex(user => user._id === id)
-    const updateUsers = [...users]
-    updateUsers[index].bookmark = !updateUsers[index].bookmark
-    setUsers(updateUsers)
-  }
+    setUsers(users.map(user => {
+      if (user._id === id) {
+        user.bookmark = !user.bookmark
+      }
+      return user
+    }))
+  };
 
   return <UsersList users={users} onToggleBookMark={handleToggleBookMark} onDelete={handleDelete}/>;
 };
