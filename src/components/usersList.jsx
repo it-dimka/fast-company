@@ -13,6 +13,14 @@ const UsersList = ({ users, ...rest }) => {
     setCurrentPage(pageIndex);
   };
 
+  const handleNextPage = () => {
+    setCurrentPage(currentPage + 1);
+  };
+
+  const handlePrevPage = () => {
+    setCurrentPage(currentPage - 1);
+  };
+
   const usersCrop = paginate(users, currentPage, pageSize);
 
   return (
@@ -47,6 +55,8 @@ const UsersList = ({ users, ...rest }) => {
         pageSize={pageSize}
         currentPage={currentPage}
         onPageChange={handlePageChange}
+        onNextPage={handleNextPage}
+        onPrevPage={handlePrevPage}
       />
     </>
   );
