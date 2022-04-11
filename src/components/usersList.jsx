@@ -42,7 +42,7 @@ const UsersList = ({ users, ...rest }) => {
   };
 
   const filteredUsers = selectedProf
-    ? users.filter(user => user.profession === selectedProf)
+    ? users.filter(user => JSON.stringify(user.profession) === JSON.stringify(selectedProf))
     : users;
   const count = filteredUsers.length;
   const usersCrop = paginate(filteredUsers, currentPage, pageSize);
@@ -51,17 +51,17 @@ const UsersList = ({ users, ...rest }) => {
     <div className={"d-flex flex-column"}>
       <div className={"d-flex"}>
         {professions &&
-          <div className={"d-flex flex-column p-3"}>
-            <GroupList
-              items={professions}
-              selectedItem={selectedProf}
-              onItemSelect={handleProfessionSelect} />
-            <button className={"btn btn-secondary btn-sm m-1"} onClick={clearFilter}>Сброс</button>
-          </div>
+              <div className={"d-flex flex-column p-3"}>
+                <GroupList
+                  items={professions}
+                  selectedItem={selectedProf}
+                  onItemSelect={handleProfessionSelect}/>
+                <button className={"btn btn-secondary btn-sm m-1"} onClick={clearFilter}>Сброс</button>
+              </div>
         }
-        {count > 0 && (
-          <div className={"flex-grow-1"}>
-            <SearchStatus length={count} />
+        <div className={"flex-grow-1"}>
+          <SearchStatus length={count}/>
+          {count > 0 && (
             <table className="table">
               <thead>
                 <tr>
@@ -85,8 +85,8 @@ const UsersList = ({ users, ...rest }) => {
                 ))}
               </tbody>
             </table>
-          </div>
-        )}
+          )}
+        </div>
       </div>
       <div className={"d-flex justify-content-center"}>
         <Pagination
