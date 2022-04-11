@@ -51,13 +51,13 @@ const UsersList = ({ users, ...rest }) => {
     <div className={"d-flex flex-column"}>
       <div className={"d-flex"}>
         {professions &&
-              <div className={"d-flex flex-column p-3"}>
-                <GroupList
-                  items={professions}
-                  selectedItem={selectedProf}
-                  onItemSelect={handleProfessionSelect}/>
-                <button className={"btn btn-secondary btn-sm m-1"} onClick={clearFilter}>Сброс</button>
-              </div>
+            <div className={"d-flex flex-column p-3"}>
+              <GroupList
+                items={professions}
+                selectedItem={selectedProf}
+                onItemSelect={handleProfessionSelect}/>
+              <button className={"btn btn-secondary btn-sm m-1"} onClick={clearFilter}>Сброс</button>
+            </div>
         }
         <div className={"flex-grow-1"}>
           <SearchStatus length={count}/>
@@ -71,7 +71,7 @@ const UsersList = ({ users, ...rest }) => {
                   <th scope="col">Встретился, раз</th>
                   <th scope="col">Оценка</th>
                   <th scope="col">Избранное</th>
-                  <th scope="col"></th>
+                  <th scope="col">{}</th>
                 </tr>
               </thead>
               <tbody>
