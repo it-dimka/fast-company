@@ -4,8 +4,7 @@ import UserPage from "../components/userPage";
 import UsersList from "../components/usersList";
 
 const Users = () => {
-  const params = useParams();
-  const { userId } = params;
+  const { userId } = useParams();
 
   return (
     <>
