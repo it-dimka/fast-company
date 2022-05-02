@@ -6,6 +6,7 @@ import api from "../api";
 import SearchStatus from "./searchStatus";
 import UsersTable from "./usersTable";
 import _ from "lodash";
+import TextFields from "./textFields";
 
 const UsersList = () => {
   const pageSize = 8;
@@ -14,6 +15,7 @@ const UsersList = () => {
   const [professions, setProfession] = useState();
   const [selectedProf, setSelectedProf] = useState();
   const [sortBy, setSortBy] = useState({ path: "name", order: "asc" });
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
     api.users.fetchAll().then(data => setUsers(data));
@@ -56,6 +58,7 @@ const UsersList = () => {
 
   const handleProfessionSelect = item => {
     setSelectedProf(item);
+    setSearch("");
   };
 
   const clearFilter = () => {
@@ -66,16 +69,22 @@ const UsersList = () => {
     setSortBy(item);
   };
 
+  const handleSearch = ({ target }) => {
+    setSearch(target.value);
+    clearFilter();
+  };
+
   if (users) {
+    const searchUsers = users?.filter(user => user.name.toLowerCase().includes(search));
     const filteredUsers = selectedProf
       ? users?.filter(user => JSON.stringify(user.profession) === JSON.stringify(selectedProf))
       : users;
-    const count = filteredUsers.length;
+    const count = search ? searchUsers.length : filteredUsers.length;
     const sortedUsers = _.orderBy(filteredUsers, [sortBy.path], [sortBy.order]);
-    const usersCrop = paginate(sortedUsers, currentPage, pageSize);
+    const usersCrop = paginate(search ? searchUsers : sortedUsers, currentPage, pageSize);
 
     return (
-      <div className={"d-flex flex-column"}>
+      <div className={"d-flex flex-column me-3"}>
         <div className={"d-flex"}>
           {professions &&
             <div className={"d-flex flex-column p-3"}>
@@ -85,6 +94,9 @@ const UsersList = () => {
           }
           <div className={"flex-grow-1"}>
             <SearchStatus length={count}/>
+            <TextFields classes={"mb-2"} cleanable placeholder={"Search..."}
+              onChange={handleSearch} name={"search"} value={search}
+            />
             {count > 0 && (
               <UsersTable users={usersCrop} selectedSort={sortBy} onSort={handleSort} onDelete={handleDelete} onToggleBookMark={handleToggleBookMark} />
             )}
