@@ -19,12 +19,12 @@ const Login = () => {
             ? <>
               <h3 className={"mb-4"}>Register</h3>
               <RegisterForm/>
-              <p>Al ready have account? <a role={"button"} onClick={toggleFormType}>Sign In</a></p>
+              <p>Al ready have account? <a className={"btn-link"} role={"button"} onClick={toggleFormType}>Sign In</a></p>
             </>
             : <>
               <h3 className={"mb-4"}>Login</h3>
               <LoginForm/>
-              <p>Dont have account? <a role={"button"} onClick={toggleFormType}>Sign Up</a></p>
+              <p>Dont have account? <a className={"btn-link"} role={"button"} onClick={toggleFormType}>Sign Up</a></p>
             </>
           }
         </div>
