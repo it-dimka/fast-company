@@ -21,6 +21,10 @@ const TextFields = ({ label, type, name, placeholder, value, onChange, error, cl
     onChange({ target: { value: "" } });
   };
 
+  const handleChange = ({ target }) => {
+    onChange({ name: target.name, value: target.value });
+  };
+
   return (
     <div className={classes}>
       <label htmlFor={name}>{label}</label>
@@ -30,7 +34,7 @@ const TextFields = ({ label, type, name, placeholder, value, onChange, error, cl
           type={showPassword ? "text" : type}
           name={name}
           value={value}
-          onChange={onChange}
+          onChange={handleChange}
           placeholder={placeholder}
           autoComplete={autoComplete()}
           className={getInputClasses()}

@@ -14,10 +14,14 @@ const SelectField = ({ label, defaultOption, value, data, onChange, error }) => 
     return `form-select${error ? " is-invalid" : ""}`;
   };
 
+  const handleChange = ({ target }) => {
+    onChange({ name: target.name, value: target.value });
+  };
+
   return (
     <div className="mb-4">
       <label htmlFor="validationCustom04" className="form-label">{label}</label>
-      <select value={value} onChange={onChange} name={"profession"} className={getSelectClasses()} id="validationCustom04" required>
+      <select value={value} onChange={handleChange} name={"profession"} className={getSelectClasses()} id="validationCustom04" required>
         <option disabled value="">{defaultOption}</option>
         {data &&
               iterationElements.map(item => <option key={item.value} value={item.value}>{item.name}</option>)}

@@ -3,6 +3,10 @@ import PropTypes from "prop-types";
 import RadioItem from "./radioItem";
 
 const RadioFields = ({ value, name, onChange, data, label }) => {
+  const handleChange = ({ target }) => {
+    onChange({ name: target.name, value: target.value });
+  };
+
   return (
     <div className="mb-4">
       <label className="form-label">{label}</label>
@@ -13,7 +17,7 @@ const RadioFields = ({ value, name, onChange, data, label }) => {
           label={item.name}
           name={name}
           value={item.value}
-          onChange={onChange}
+          onChange={handleChange}
           checked={item.value === value}
         />)}
       </div>

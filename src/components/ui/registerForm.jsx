@@ -4,15 +4,18 @@ import TextFields from "../common/form/textFields";
 import api from "../../api";
 import SelectField from "../common/form/selectField";
 import RadioFields from "../common/form/Radio";
+import MultiSelectField from "../common/form/multiSelectField";
 
 const RegisterForm = () => {
   const genderOptions = [{ name: "Male", value: "male" }, { name: "Female", value: "female" }, { name: "Other", value: "other" }];
-  const [data, setData] = useState({ email: "", password: "", profession: "", sex: "male" });
+  const [data, setData] = useState({ email: "", password: "", profession: "", sex: "male", qualities: [] });
   const [errors, setErrors] = useState({});
   const [professions, setProfession] = useState();
+  const [qualities, setQualities] = useState({});
 
   useEffect(() => {
     api.professions.fetchAll().then((data) => setProfession(data));
+    api.qualities.fetchAll().then((data) => setQualities(data));
   }, []);
 
   useEffect(() => {
@@ -50,7 +53,7 @@ const RegisterForm = () => {
     }
   };
 
-  const handleChange = ({ target }) => {
+  const handleChange = (target) => {
     setData(prevState => ({ ...prevState, [target.name]: target.value }));
   };
 
@@ -80,6 +83,7 @@ const RegisterForm = () => {
       <SelectField label={"Profession"} defaultOption={"Choose..."} error={errors.profession}
         value={data.profession} data={professions} onChange={handleChange} />
       <RadioFields data={genderOptions} value={data.sex} name={"sex"} onChange={handleChange} label={"Выберите пол"} />
+      <MultiSelectField data={qualities} name={"qualities"} label={"Выберите ваши качества"} onChange={handleChange} />
       <button className={"btn btn-primary w-100 mx-auto mb-2"} type={"submit"} disabled={!isValid}>Submit</button>
     </form>
   );
