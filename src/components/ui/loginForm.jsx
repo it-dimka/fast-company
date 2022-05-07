@@ -63,7 +63,7 @@ const LoginForm = () => {
       <TextFields onChange={handleChange} name={"password"} label={"Password"} type={"password"}
         value={data.password} error={errors?.password} placeholder={"Password"}
       />
-      <button className={"btn btn-primary w-100 mx-auto"} type={"submit"} disabled={!isValid}>Submit</button>
+      <button className={"btn btn-primary w-100 mx-auto mb-2"} type={"submit"} disabled={!isValid}>Submit</button>
     </form>
   );
 };
