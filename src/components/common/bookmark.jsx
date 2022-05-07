@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { checkIcon, unCheckIcon } from "../utils/svgIcons";
+import { checkIcon, unCheckIcon } from "../../utils/svgIcons";
 
 const Bookmark = ({ status, id, onToggleBookMark }) => {
   const getRenderIcon = () => {

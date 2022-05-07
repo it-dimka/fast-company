@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { arrowDown, arrowUp } from "../utils/svgIcons";
+import { arrowDown, arrowUp } from "../../../utils/svgIcons";
 
 const TableHeader = ({ selectedSort, onSort, columns }) => {
   const handleSort = (item) => {
