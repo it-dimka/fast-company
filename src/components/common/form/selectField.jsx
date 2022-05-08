@@ -17,8 +17,8 @@ const SelectField = ({ label, name, defaultOption, value, data, onChange, error 
 
   return (
     <div className="mb-4">
-      <label className="form-label">{label}</label>
-      <select value={value} onChange={handleChange} name={name} className={getSelectClasses()} id="validationCustom04" required>
+      <label htmlFor={name} className="form-label">{label}</label>
+      <select value={value} onChange={handleChange} name={name} className={getSelectClasses()} id={name} required>
         <option disabled value="">{defaultOption}</option>
         {iterationElements?.length > 0 &&
               iterationElements.map(item => <option key={item.value} value={item.value}>{item.label}</option>)}

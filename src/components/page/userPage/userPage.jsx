@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import api from "../../../api";
 import PropTypes from "prop-types";
-import { useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import Qualities from "../../ui/qualities";
 
 const UserPage = ({ userId }) => {
@@ -24,7 +24,8 @@ const UserPage = ({ userId }) => {
         <Qualities qualities={user?.qualities} />
         <p><span>Completed Meetings: {user?.completedMeetings}</span></p>
         <h2>Rate: {user?.rate}</h2>
-        <button className={"btn btn-primary"} onClick={() => handleClick()}>All users</button>
+        <Link to={`${userId}/edit`}><button className={"btn btn-secondary me-4"}>Edit Profile</button></Link>
+        <button className={"btn btn-outline-primary"} onClick={() => handleClick()}>All users</button>
       </div>
     );
   }
