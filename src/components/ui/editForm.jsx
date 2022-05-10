@@ -7,13 +7,28 @@ import { getProfessionByLabel, getQualitiesByLabel } from "../../utils/formatDat
 import RadioFields from "../common/form/Radio";
 import { genderOptions } from "../../utils/genderOptions";
 import MultiSelectField from "../common/form/multiSelectField";
+import { validator } from "../../utils/validator";
+import { validatorConfigEditForm } from "../../utils/errors";
 
 const EditForm = () => {
   const { userId } = useParams();
   const [user, setUser] = useState();
   const [professions, setProfession] = useState();
   const [qualities, setQualities] = useState([]);
+  const [errors, setErrors] = useState({});
   const history = useHistory();
+
+  const validate = () => {
+    const errors = validator(user, validatorConfigEditForm);
+    setErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
+  const isValid = Object.keys(errors).length === 0;
+
+  useEffect(() => {
+    validate();
+  }, [user]);
 
   useEffect(() => {
     api.professions.fetchAll().then((data) => {
@@ -32,6 +47,8 @@ const EditForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    const isValid = validate();
+    if (!isValid) return;
     api.users.update(userId, user).then();
     history.replace(`/users/${userId}`);
   };
@@ -61,12 +78,12 @@ const EditForm = () => {
         <div className={"col-md-6 offset-md-3 shadow p-4"}>
           {user
             ? <form onSubmit={handleSubmit}>
-              <TextFields onChange={handleChange} name={"name"} value={user?.name} label={"Имя"} />
-              <TextFields onChange={handleChange} name={"email"} value={user?.email} label={"Электронная почта"} />
+              <TextFields onChange={handleChange} name={"name"} value={user?.name} error={errors.name} label={"Имя"} />
+              <TextFields onChange={handleChange} name={"email"} value={user?.email} error={errors.email} label={"Электронная почта"} />
               <SelectField onChange={handleChange} name={"profession"} value={user?.profession._id} data={professions} label={"Выберите свою профессию"} />
               <RadioFields onChange={handleChange} name={"sex"} value={user?.sex} data={genderOptions} label={"Ваш пол"} />
               <MultiSelectField onChange={handleChange} name={"qualities"} defaultValue={userQualities} data={qualities} label={"Ваши качетсва"} />
-              <button className={"btn btn-success"} onClick={handleSubmit}>Save</button>
+              <button className={"btn btn-success"} disabled={!isValid} onClick={handleSubmit}>Save</button>
             </form>
             : <span className={"fs-4 fw-bold ms-2"}>Loading Form...</span>
           }

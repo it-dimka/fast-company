@@ -8,6 +8,7 @@ import MultiSelectField from "../common/form/multiSelectField";
 import CheckBoxFields from "../common/form/CheckBoxFields";
 import { getProfessionById, getProfessionByLabel, getQualitiesById, getQualitiesByLabel } from "../../utils/formatData";
 import { genderOptions } from "../../utils/genderOptions";
+import { validatorConfigRegisterForm } from "../../utils/errors";
 
 const RegisterForm = () => {
   const [data, setData] = useState({
@@ -37,48 +38,12 @@ const RegisterForm = () => {
     validate();
   }, [data]);
 
-  const validatorConfig = {
-    email: {
-      isRequired: {
-        message: "Email обязателен для заполнения"
-      },
-      isEmail: {
-        message: "Email введен не корректно"
-      }
-    },
-    password: {
-      isRequired: {
-        message: "Password обязателен для заполнения"
-      },
-      isCapitalSymbol: {
-        message: "Пароль должен сожержать хотя бы одну заглавную букву"
-      },
-      isContainDigit: {
-        message: "Пароль должен сожержать хотя бы одно число"
-      },
-      min: {
-        message: "Пароль не должен быть короче 8 символов",
-        value: 8
-      }
-    },
-    profession: {
-      isRequired: {
-        message: "Обязательно укажите вашу профессию"
-      }
-    },
-    license: {
-      isRequired: {
-        message: "Подтвердите что вы ознакомились с лицензионным соглашением"
-      }
-    }
-  };
-
   const handleChange = (target) => {
     setData(prevState => ({ ...prevState, [target.name]: target.value }));
   };
 
   const validate = () => {
-    const errors = validator(data, validatorConfig);
+    const errors = validator(data, validatorConfigRegisterForm);
     setErrors(errors);
     return Object.keys(errors).length === 0;
   };
