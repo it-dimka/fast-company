@@ -69,7 +69,7 @@ const UsersListPage = () => {
     setSortBy(item);
   };
 
-  const handleSearch = ({ target }) => {
+  const handleSearch = (target) => {
     setSearch(target.value);
     clearFilter();
   };
