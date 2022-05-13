@@ -18,7 +18,7 @@ const TextFields = ({ label, type, name, placeholder, value, onChange, error, cl
   };
 
   const clearInput = () => {
-    onChange({ target: { value: "" } });
+    onChange({ value: "" });
   };
 
   const handleChange = ({ target }) => {
