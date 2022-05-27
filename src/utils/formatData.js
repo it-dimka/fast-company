@@ -20,10 +20,10 @@ export const getQualitiesById = (elements, qualities) => {
   }
   return qualitiesArray;
 };
-export const getProfessionByLabel = (professions) => {
-  return Object.keys(professions).map((professionName) => ({
-    label: professions[professionName].name,
-    value: professions[professionName]._id
+export const getDataByLabel = (data) => {
+  return Object.keys(data).map((item) => ({
+    label: data[item].name,
+    value: data[item]._id
   }));
 };
 export const getQualitiesByLabel = (qualities) => {

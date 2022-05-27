@@ -79,3 +79,16 @@ export const validatorConfigRegisterForm = {
     }
   }
 };
+
+export const validatorConfigAddCommentForm = {
+  userId: {
+    isRequired: {
+      message: "Укажите автора комментария"
+    }
+  },
+  content: {
+    isRequired: {
+      message: "Введите текст комментария"
+    }
+  }
+};

@@ -6,7 +6,7 @@ import SelectField from "../common/form/selectField";
 import RadioFields from "../common/form/Radio";
 import MultiSelectField from "../common/form/multiSelectField";
 import CheckBoxFields from "../common/form/CheckBoxFields";
-import { getProfessionById, getProfessionByLabel, getQualitiesById, getQualitiesByLabel } from "../../utils/formatData";
+import { getProfessionById, getDataByLabel, getQualitiesById, getQualitiesByLabel } from "../../utils/formatData";
 import { genderOptions } from "../../utils/genderOptions";
 import { validatorConfigRegisterForm } from "../../utils/errors";
 
@@ -25,7 +25,7 @@ const RegisterForm = () => {
 
   useEffect(() => {
     api.professions.fetchAll().then((data) => {
-      const professionsList = getProfessionByLabel(data);
+      const professionsList = getDataByLabel(data);
       setProfession(professionsList);
     });
     api.qualities.fetchAll().then((data) => {

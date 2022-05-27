@@ -3,12 +3,13 @@ import { useParams, useHistory } from "react-router-dom";
 import api from "../../api";
 import TextFields from "../common/form/textFields";
 import SelectField from "../common/form/selectField";
-import { getProfessionByLabel, getQualitiesByLabel } from "../../utils/formatData";
+import { getDataByLabel, getQualitiesByLabel } from "../../utils/formatData";
 import RadioFields from "../common/form/Radio";
 import { genderOptions } from "../../utils/genderOptions";
 import MultiSelectField from "../common/form/multiSelectField";
 import { validator } from "../../utils/validator";
 import { validatorConfigEditForm } from "../../utils/errors";
+import ButtonHistoryBack from "../common/buttonHistoryBack";
 
 const EditForm = () => {
   const { userId } = useParams();
@@ -32,7 +33,7 @@ const EditForm = () => {
 
   useEffect(() => {
     api.professions.fetchAll().then((data) => {
-      const professionsList = getProfessionByLabel(data);
+      const professionsList = getDataByLabel(data);
       setProfession(professionsList);
     });
     api.qualities.fetchAll().then((data) => {
@@ -74,6 +75,7 @@ const EditForm = () => {
 
   return (
     <div className={"container mt-4"}>
+      <ButtonHistoryBack />
       <div className={"row"}>
         <div className={"col-md-6 offset-md-3 shadow p-4"}>
           {user
