@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-const TextAreaField = ({ label, name, placeholder, value, onChange, error, classes }) => {
+const TextAreaField = ({ label, name, placeholder, value, onChange, error, classes, row }) => {
   const getInputClasses = () => {
     return `form-control${error ? " is-invalid" : ""}`;
   };
@@ -18,7 +18,7 @@ const TextAreaField = ({ label, name, placeholder, value, onChange, error, class
           id={name}
           name={name}
           value={value}
-          rows={3}
+          rows={row}
           placeholder={placeholder}
           onChange={handleChange}
           className={getInputClasses()}
@@ -32,7 +32,8 @@ const TextAreaField = ({ label, name, placeholder, value, onChange, error, class
 };
 
 TextAreaField.defaultProps = {
-  classes: "mb-4"
+  classes: "mb-4",
+  row: 3
 };
 
 TextAreaField.propTypes = {
@@ -42,6 +43,7 @@ TextAreaField.propTypes = {
   placeholder: PropTypes.string,
   classes: PropTypes.string,
   error: PropTypes.string,
+  row: PropTypes.number,
   onChange: PropTypes.func.isRequired
 };
 

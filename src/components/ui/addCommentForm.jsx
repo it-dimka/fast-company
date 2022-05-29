@@ -19,7 +19,9 @@ const AddCommentForm = ({ onSubmit }) => {
   }, []);
 
   useEffect(() => {
-    validate();
+    if (Object.values(data).every(item => !!item)) {
+      validate();
+    }
   }, [data]);
 
   const validate = () => {
