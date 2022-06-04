@@ -80,8 +80,8 @@ const UsersListPage = () => {
 
     return (
       <div className={"d-flex flex-column me-3"}>
-        <div className={"d-flex"}>
-          {professions &&
+        <div className={"d-flex p-3"}>
+          {!!professions.length &&
             <div className={"d-flex flex-column p-3"}>
               <GroupList items={professions} selectedItem={selectedProf} onItemSelect={handleProfessionSelect}/>
               <button className={"btn btn-secondary btn-sm m-1"} onClick={clearFilter}>Сброс</button>
@@ -89,9 +89,9 @@ const UsersListPage = () => {
           }
           <div className={"flex-grow-1"}>
             <SearchStatus length={count}/>
-            <TextFields classes={"mb-2"} cleanable placeholder={"Search..."}
+            {!!count && <TextFields classes={"mb-2"} cleanable placeholder={"Search..."}
               onChange={handleSearch} name={"search"} value={search}
-            />
+            />}
             {count > 0 && (
               <UsersTable users={usersCrop} selectedSort={sortBy} onSort={handleSort} onDelete={handleDelete} onToggleBookMark={handleToggleBookMark} />
             )}
