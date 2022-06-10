@@ -70,7 +70,7 @@ const UsersListPage = () => {
   };
 
   if (users) {
-    const searchUsers = users?.filter(user => user.name.toLowerCase().includes(search));
+    const searchUsers = users?.filter(user => user?.name?.toLowerCase()?.includes(search));
     const filteredUsers = selectedProf
       ? users?.filter(user => user.profession === selectedProf?._id)
       : users;
