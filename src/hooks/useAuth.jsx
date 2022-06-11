@@ -35,12 +35,13 @@ const AuthProvider = ({ children }) => {
     }
   }
 
-  async function login({ email, password }) {
+  async function signIn({ email, password, ...rest }) {
     const url = `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${process.env.REACT_APP_FIREBASE_KEY}`;
 
     try {
       const { data } = await httpAuth.post(url, { email, password, returnSecureToken: true });
       setToken(data);
+      await getUser({ _id: data.localId, ...rest });
     } catch (error) {
       errorCatcher(error);
       const { code, message } = error.response.data.error;
@@ -66,6 +67,15 @@ const AuthProvider = ({ children }) => {
     }
   }
 
+  async function getUser(data) {
+    try {
+      const { content } = await usersService.getById(data);
+      setUser(content);
+    } catch (error) {
+      errorCatcher(error);
+    }
+  }
+
   function errorCatcher(error) {
     const { message } = error.response.data;
     setError(message);
@@ -78,8 +88,11 @@ const AuthProvider = ({ children }) => {
     }
   }, [error]);
 
+  // TODO: почему приходит массив значений а не объект?
+  console.log(currentUser);
+
   return (
-    <AuthContext.Provider value={{ currentUser, signUp, login }}>
+    <AuthContext.Provider value={{ currentUser, signUp, signIn }}>
       {children}
     </AuthContext.Provider>
   );

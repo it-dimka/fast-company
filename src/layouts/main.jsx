@@ -11,7 +11,7 @@ const Main = () => {
   return (
     <div className={"container mt-5"}>
       <h1>Main page</h1>
-      <h3>Иницифлизация Firebase</h3>
+      <h3>Инициализация Firebase</h3>
       <ul>
         <li>Status {status}</li>
         <li>Progress {progress}%</li>

@@ -10,7 +10,7 @@ const LoginForm = () => {
   const history = useHistory();
   const [data, setData] = useState({ email: "", password: "", stayOn: false });
   const [errors, setErrors] = useState({});
-  const { login } = useAuth();
+  const { signIn } = useAuth();
 
   useEffect(() => {
     validate();
@@ -34,7 +34,7 @@ const LoginForm = () => {
     if (!isValid) return;
 
     try {
-      await login(data);
+      await signIn(data);
       history.push("/");
     } catch (error) {
       setErrors(error);
