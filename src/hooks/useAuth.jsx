@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import axios from "axios";
 import usersService from "../services/users.service";
 import { toast } from "react-toastify";
-import { setToken } from "../services/localStorage.service";
+import localStorageService, { setToken } from "../services/localStorage.service";
 
 const httpAuth = axios.create();
 
@@ -35,13 +35,13 @@ const AuthProvider = ({ children }) => {
     }
   }
 
-  async function signIn({ email, password, ...rest }) {
+  async function signIn({ email, password }) {
     const url = `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${process.env.REACT_APP_FIREBASE_KEY}`;
 
     try {
       const { data } = await httpAuth.post(url, { email, password, returnSecureToken: true });
       setToken(data);
-      await getUserData({ _id: data.localId, ...rest });
+      await getUserData();
     } catch (error) {
       errorCatcher(error);
       const { code, message } = error.response.data.error;
@@ -67,9 +67,9 @@ const AuthProvider = ({ children }) => {
     }
   }
 
-  async function getUserData(data) {
+  async function getUserData() {
     try {
-      const { content } = await usersService.getById(data);
+      const { content } = await usersService.getCurrentUser();
       setUser(content);
     } catch (error) {
       errorCatcher(error);
@@ -88,7 +88,11 @@ const AuthProvider = ({ children }) => {
     }
   }, [error]);
 
-  console.log(currentUser);
+  useEffect(() => {
+    if (localStorageService.getAccessToken()) {
+      getUserData();
+    }
+  }, []);
 
   return (
     <AuthContext.Provider value={{ currentUser, signUp, signIn }}>
