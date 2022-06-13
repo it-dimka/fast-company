@@ -68,6 +68,15 @@ export const validatorConfigRegisterForm = {
       value: 8
     }
   },
+  name: {
+    isRequired: {
+      message: "Это поле обязательно для заполнения"
+    },
+    min: {
+      message: "Мининум два символа",
+      value: 2
+    }
+  },
   profession: {
     isRequired: {
       message: "Обязательно укажите вашу профессию"

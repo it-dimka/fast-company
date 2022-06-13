@@ -18,6 +18,7 @@ const RegisterForm = () => {
   const [data, setData] = useState({
     email: "",
     password: "",
+    name: "",
     profession: "",
     sex: "male",
     qualities: [],
@@ -70,6 +71,8 @@ const RegisterForm = () => {
       <TextFields onChange={handleChange} name={"password"} label={"Password"} type={"password"}
         value={data.password} error={errors?.password} placeholder={"Password"}
       />
+      <TextFields onChange={handleChange} name={"name"} value={data.name} error={errors?.name}
+        label={"Имя"} placeholder={"Ваше имя"} />
       <SelectField label={"Profession"} name={"profession"} defaultOption={"Choose..."} error={errors.profession}
         value={data.profession} data={professionsList} onChange={handleChange}/>
       <RadioFields data={genderOptions} value={data.sex} name={"sex"} onChange={handleChange} label={"Выберите пол"}/>

@@ -41,7 +41,7 @@ const AuthProvider = ({ children }) => {
     try {
       const { data } = await httpAuth.post(url, { email, password, returnSecureToken: true });
       setToken(data);
-      await getUser({ _id: data.localId, ...rest });
+      await getUserData({ _id: data.localId, ...rest });
     } catch (error) {
       errorCatcher(error);
       const { code, message } = error.response.data.error;
@@ -67,7 +67,7 @@ const AuthProvider = ({ children }) => {
     }
   }
 
-  async function getUser(data) {
+  async function getUserData(data) {
     try {
       const { content } = await usersService.getById(data);
       setUser(content);
@@ -87,9 +87,6 @@ const AuthProvider = ({ children }) => {
       setError(null);
     }
   }, [error]);
-
-  // TODO: почему приходит массив значений а не объект?
-  console.log(currentUser);
 
   return (
     <AuthContext.Provider value={{ currentUser, signUp, signIn }}>

@@ -51,7 +51,7 @@ const useMokData = () => {
         incrementCount();
       }
       for (const user of users) {
-        await httpService.put("user/" + user._id, user);
+        await httpService.put("users/" + user._id, user);
         incrementCount();
       }
     } catch (error) {
