@@ -22,7 +22,7 @@ const AuthProvider = ({ children }) => {
     try {
       const { data } = await httpAuth.post(url, { email, password, returnSecureToken: true });
       setToken(data);
-      await createUser({ _id: data.localId, email, ...rest });
+      await createUser({ _id: data.localId, email, rate: getRandomInt(1, 5), completedMeetings: getRandomInt(1, 500), ...rest });
     } catch (error) {
       errorCatcher(error);
       const { code, message } = error.response.data.error;
@@ -88,6 +88,8 @@ const AuthProvider = ({ children }) => {
     }
   }, [error]);
 
+  console.log(currentUser);
+
   return (
     <AuthContext.Provider value={{ currentUser, signUp, signIn }}>
       {children}
@@ -98,5 +100,9 @@ const AuthProvider = ({ children }) => {
 AuthProvider.propTypes = {
   children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node])
 };
+
+function getRandomInt(min, max) {
+  return Math.floor(Math.random() * (max - min + 1) + min);
+}
 
 export default AuthProvider;

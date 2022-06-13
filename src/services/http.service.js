@@ -19,7 +19,7 @@ http.interceptors.request.use(
 );
 
 function transformData(data) {
-  return data ? Object.values(data) : [];
+  return data && !data._id ? Object.values(data) : data;
 }
 
 http.interceptors.response.use(
