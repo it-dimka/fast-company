@@ -11,6 +11,7 @@ import EditForm from "./components/ui/editForm";
 import ProfessionProvider from "./hooks/useProfession";
 import QualitiesProvider from "./hooks/useQualities";
 import AuthProvider from "./hooks/useAuth";
+import ProtectedRoute from "./components/common/protectedRoute";
 
 const App = () => {
   return (
@@ -23,7 +24,7 @@ const App = () => {
               <Route exact path={"/"} component={Main} />
               <Route path={"/login/:type?"} component={Login} />
               <Route path={"/users/:userId/edit"} component={EditForm} />
-              <Route path={"/users/:userId?"} component={Users} />
+              <ProtectedRoute path={"/users/:userId?"} component={Users} />
               <Route path={"/404"} component={NotFound} />
               <Redirect to={"/404"} />
             </Switch>
