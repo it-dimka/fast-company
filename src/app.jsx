@@ -7,7 +7,6 @@ import Login from "./layouts/login";
 import Users from "./layouts/users";
 import NotFound from "./layouts/notFound";
 import NavBar from "./components/ui/navBar";
-import EditForm from "./components/ui/editForm";
 import ProfessionProvider from "./hooks/useProfession";
 import QualitiesProvider from "./hooks/useQualities";
 import AuthProvider from "./hooks/useAuth";
@@ -23,8 +22,7 @@ const App = () => {
             <Switch>
               <Route exact path={"/"} component={Main} />
               <Route path={"/login/:type?"} component={Login} />
-              <Route path={"/users/:userId/edit"} component={EditForm} />
-              <ProtectedRoute path={"/users/:userId?"} component={Users} />
+              <ProtectedRoute path={"/users/:userId?/:edit?"} component={Users} />
               <Route path={"/404"} component={NotFound} />
               <Redirect to={"/404"} />
             </Switch>
