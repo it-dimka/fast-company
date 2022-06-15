@@ -35,7 +35,7 @@ const LoginForm = () => {
 
     try {
       await signIn(data);
-      history.push("/");
+      history.push(history.location.state ? history.location.state.from.pathname : "/");
     } catch (error) {
       setErrors(error);
     }
