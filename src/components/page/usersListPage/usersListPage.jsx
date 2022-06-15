@@ -12,7 +12,7 @@ import { useProfessions } from "../../../hooks/useProfession";
 const UsersListPage = () => {
   const pageSize = 8;
   const { users } = useUser();
-  const { professions } = useProfessions();
+  const { isLoading: professionsLoading, professions } = useProfessions();
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedProf, setSelectedProf] = useState();
   const [sortBy, setSortBy] = useState({ path: "name", order: "asc" });
@@ -21,11 +21,6 @@ const UsersListPage = () => {
   useEffect(() => {
     setCurrentPage(1);
   }, [selectedProf]);
-
-  const handleDelete = (userId) => {
-    // setUsers((prevState) => prevState?.filter((user) => user._id !== userId));\
-    console.log(userId);
-  };
 
   const handleToggleBookMark = (id) => {
     // setUsers(
@@ -81,7 +76,7 @@ const UsersListPage = () => {
     return (
       <div className={"d-flex flex-column me-3"}>
         <div className={"d-flex p-3"}>
-          {!!professions.length &&
+          {professions && !professionsLoading &&
             <div className={"d-flex flex-column p-3"}>
               <GroupList items={professions} selectedItem={selectedProf} onItemSelect={handleProfessionSelect}/>
               <button className={"btn btn-secondary btn-sm m-1"} onClick={clearFilter}>Сброс</button>
@@ -93,7 +88,7 @@ const UsersListPage = () => {
               onChange={handleSearch} name={"search"} value={search}
             />}
             {count > 0 && (
-              <UsersTable users={usersCrop} selectedSort={sortBy} onSort={handleSort} onDelete={handleDelete} onToggleBookMark={handleToggleBookMark} />
+              <UsersTable users={usersCrop} selectedSort={sortBy} onSort={handleSort} onToggleBookMark={handleToggleBookMark} />
             )}
           </div>
         </div>
