@@ -37,7 +37,7 @@ UsersTable.propTypes = {
   users: PropTypes.array.isRequired,
   onSort: PropTypes.func.isRequired,
   selectedSort: PropTypes.object.isRequired,
-  onToggleBookMark: PropTypes.func.isRequired,
+  onToggleBookMark: PropTypes.func.isRequired
 };
 
 export default UsersTable;
