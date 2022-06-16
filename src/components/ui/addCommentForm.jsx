@@ -1,22 +1,12 @@
 import React, { useEffect, useState } from "react";
-import api from "../../api";
-import SelectField from "../common/form/selectField";
 import TextAreaField from "../common/form/textAreaField";
 import { validator } from "../../utils/validator";
 import { validatorConfigAddCommentForm } from "../../utils/errors";
 import PropTypes from "prop-types";
-import { getDataByLabel } from "../../utils/formatData";
-
-const initialData = { userId: "", content: "" };
 
 const AddCommentForm = ({ onSubmit }) => {
-  const [data, setData] = useState(initialData);
-  const [users, setUsers] = useState();
+  const [data, setData] = useState({});
   const [errors, setErrors] = useState({});
-
-  useEffect(() => {
-    api.users.fetchAll().then(data => setUsers(data));
-  }, []);
 
   useEffect(() => {
     if (Object.values(data).every(item => !!item)) {
@@ -43,17 +33,14 @@ const AddCommentForm = ({ onSubmit }) => {
   };
 
   const clearForm = () => {
-    setData(initialData);
+    setData({});
     setErrors({});
   };
-
-  const arrayOfUsers = users && getDataByLabel(users);
 
   return (
     <form onSubmit={handleSubmit}>
       <h2>New comment</h2>
-      <SelectField onChange={handleChange} name={"userId"} value={data.userId} data={arrayOfUsers} error={errors.userId} label={"Автор комментария"} defaultOption={"Выберите автора"} />
-      <TextAreaField onChange={handleChange} name={"content"} value={data.content} error={errors.content} label={"Комментарий"} />
+      <TextAreaField onChange={handleChange} name={"content"} value={data?.content || ""} error={errors.content} label={"Комментарий"} />
       <div className={"d-flex justify-content-end"}>
         <button className={"btn btn-primary"}>Опубликовать</button>
       </div>

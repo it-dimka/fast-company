@@ -8,10 +8,12 @@ import _ from "lodash";
 import TextFields from "../../common/form/textFields";
 import { useUser } from "../../../hooks/useUser";
 import { useProfessions } from "../../../hooks/useProfession";
+import { useAuth } from "../../../hooks/useAuth";
 
 const UsersListPage = () => {
   const pageSize = 8;
   const { users } = useUser();
+  const { currentUser } = useAuth();
   const { isLoading: professionsLoading, professions } = useProfessions();
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedProf, setSelectedProf] = useState();
@@ -64,11 +66,16 @@ const UsersListPage = () => {
     clearFilter();
   };
 
-  if (users) {
-    const searchUsers = users?.filter(user => user?.name?.toLowerCase()?.includes(search));
+  const filterUsers = (data) => {
     const filteredUsers = selectedProf
-      ? users?.filter(user => user.profession === selectedProf?._id)
-      : users;
+      ? data.filter(user => user.profession === selectedProf?._id)
+      : data;
+    return filteredUsers.filter(user => user._id !== currentUser._id);
+  };
+
+  if (users) {
+    const filteredUsers = filterUsers(users);
+    const searchUsers = filteredUsers.filter(user => user?.name?.toLowerCase()?.includes(search));
     const count = search ? searchUsers.length : filteredUsers.length;
     const sortedUsers = _.orderBy(filteredUsers, [sortBy.path], [sortBy.order]);
     const usersCrop = paginate(search ? searchUsers : sortedUsers, currentPage, pageSize);
