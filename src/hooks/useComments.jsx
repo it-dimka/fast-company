@@ -34,14 +34,25 @@ export const CommentsProvider = ({ children }) => {
     }
   }
 
+  async function getComments() {
+    try {
+      const { content } = await commentService.getComments(userId);
+      console.log(content);
+      setComments(content);
+    } catch (error) {
+      errorCatcher(error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
   function errorCatcher(error) {
     const { message } = error.response.data;
     setError(message);
   }
 
   useEffect(() => {
-    setComments(null);
-    setLoading(false);
+    getComments();
   }, []);
 
   useEffect(() => {

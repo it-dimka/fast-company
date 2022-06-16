@@ -17,6 +17,9 @@ module.exports = {
     semi: [2, "always"],
     "space-before-function-paren": ["error",
       { anonymous: "always", named: "never" }],
-    quotes: ["error", "double", { allowTemplateLiterals: true }]
+    quotes: ["error", "double", {
+      allowTemplateLiterals: true,
+      avoidEscape: true
+    }]
   }
 };
