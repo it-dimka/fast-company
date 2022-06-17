@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams, useHistory } from "react-router-dom";
-import api from "../../api";
+import { useHistory } from "react-router-dom";
 import TextFields from "../common/form/textFields";
 import SelectField from "../common/form/selectField";
 import { getDataByLabel, getQualitiesByLabel } from "../../utils/formatData";
@@ -10,14 +9,20 @@ import MultiSelectField from "../common/form/multiSelectField";
 import { validator } from "../../utils/validator";
 import { validatorConfigEditForm } from "../../utils/errors";
 import ButtonHistoryBack from "../common/buttonHistoryBack";
+import { useProfessions } from "../../hooks/useProfession";
+import { useQualities } from "../../hooks/useQualities";
+import { useAuth } from "../../hooks/useAuth";
 
 const EditForm = () => {
-  const { userId } = useParams();
-  const [user, setUser] = useState();
-  const [professions, setProfession] = useState();
-  const [qualities, setQualities] = useState([]);
-  const [errors, setErrors] = useState({});
   const history = useHistory();
+  const { currentUser, updateUserData } = useAuth();
+  const [user, setUser] = useState(currentUser);
+  const [errors, setErrors] = useState({});
+  const [isLoading, setLoading] = useState(true);
+  const { professions } = useProfessions();
+  const { qualities } = useQualities();
+  const professionsList = getDataByLabel(professions);
+  const qualitiesList = getQualitiesByLabel(qualities);
 
   const validate = () => {
     const errors = validator(user, validatorConfigEditForm);
@@ -32,45 +37,33 @@ const EditForm = () => {
   }, [user]);
 
   useEffect(() => {
-    api.professions.fetchAll().then((data) => {
-      const professionsList = getDataByLabel(data);
-      setProfession(professionsList);
-    });
-    api.qualities.fetchAll().then((data) => {
-      const qualitiesList = getQualitiesByLabel(data);
-      setQualities(qualitiesList);
-    });
-  }, []);
-
-  useEffect(() => {
-    api.users.getById(userId).then(data => setUser(data));
-  }, []);
+    if (!!currentUser && !!qualities.length && !!professions.length) {
+      setLoading(false);
+    }
+  }, [qualities, professions, currentUser]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     const isValid = validate();
     if (!isValid) return;
-    api.users.update(userId, user).then();
-    history.replace(`/users/${userId}`);
+    updateUserData(user);
+    history.replace(`/users/${currentUser._id}`);
   };
 
   const handleChange = (target) => {
     if (target.name === "profession") {
       const _id = target.value;
-      const name = professions?.find(item => item.value === _id).label;
-      setUser(prevState => ({ ...prevState, profession: { _id, name } }));
+      setUser(prevState => ({ ...prevState, profession: _id }));
     } else if (target.name === "qualities") {
-      const qualities = target.value.map(item => {
-        return { name: item.label, _id: item.value, color: item.color };
-      });
+      const qualities = target.value.map(item => item.value);
       setUser(prevState => ({ ...prevState, qualities }));
     } else {
       setUser(prevState => ({ ...prevState, [target.name]: target.value }));
     }
   };
 
-  const userQualities = user?.qualities.map(item => {
-    return { label: item.name, value: item._id, color: item.color };
+  const userQualities = user.qualities.map(id => {
+    return qualitiesList.find(q => q.value === id);
   });
 
   return (
@@ -78,13 +71,13 @@ const EditForm = () => {
       <ButtonHistoryBack />
       <div className={"row"}>
         <div className={"col-md-6 offset-md-3 shadow p-4"}>
-          {user
+          {!isLoading
             ? <form onSubmit={handleSubmit}>
               <TextFields onChange={handleChange} name={"name"} value={user?.name} error={errors.name} label={"Имя"} />
               <TextFields onChange={handleChange} name={"email"} value={user?.email} error={errors.email} label={"Электронная почта"} />
-              <SelectField onChange={handleChange} name={"profession"} value={user?.profession._id} data={professions} label={"Выберите свою профессию"} />
+              <SelectField onChange={handleChange} name={"profession"} value={user?.profession} data={professionsList} label={"Выберите свою профессию"} />
               <RadioFields onChange={handleChange} name={"sex"} value={user?.sex} data={genderOptions} label={"Ваш пол"} />
-              <MultiSelectField onChange={handleChange} name={"qualities"} defaultValue={userQualities} data={qualities} label={"Ваши качетсва"} />
+              <MultiSelectField onChange={handleChange} name={"qualities"} defaultValue={userQualities} data={qualitiesList} label={"Ваши качетсва"} />
               <button className={"btn btn-success"} disabled={!isValid} onClick={handleSubmit}>Save</button>
             </form>
             : <span className={"fs-4 fw-bold ms-2"}>Loading Form...</span>

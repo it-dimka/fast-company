@@ -2,9 +2,11 @@ import React from "react";
 import PropTypes from "prop-types";
 import { displayDate } from "../../../utils/displayDate";
 import { useUser } from "../../../hooks/useUser";
+import { useAuth } from "../../../hooks/useAuth";
 
 const Comment = ({ comment, onRemove }) => {
   const { getUserById } = useUser();
+  const { currentUser } = useAuth();
   const user = getUserById(comment.userId);
 
   return (
@@ -18,9 +20,11 @@ const Comment = ({ comment, onRemove }) => {
               <div className="mb-4">
                 <div className="d-flex justify-content-between align-items-center">
                   <p className="mb-1">{user.name}<span className="small ms-2">{displayDate(comment.created_at)}</span></p>
-                  <button className="btn btn-sm text-primary d-flex align-items-center" onClick={() => onRemove(comment._id)}>
-                    <i className="bi bi-x-lg"></i>
-                  </button>
+                  {currentUser._id === comment.userId &&
+                      <button className="btn btn-sm text-primary d-flex align-items-center" onClick={() => onRemove(comment._id)}>
+                        <i className="bi bi-x-lg"></i>
+                      </button>
+                  }
                 </div>
                 <p className="small mb-0">{comment.content}</p>
               </div>
