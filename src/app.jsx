@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Redirect, Route, Switch } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -12,8 +12,17 @@ import QualitiesProvider from "./hooks/useQualities";
 import AuthProvider from "./hooks/useAuth";
 import ProtectedRoute from "./components/common/protectedRoute";
 import LogOut from "./layouts/logOut";
+import { useDispatch } from "react-redux";
+import { loadQualitiesList } from "./store/qualities";
 
 const App = () => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    console.log("wow");
+    dispatch(loadQualitiesList());
+  }, []);
+
   return (
     <>
       <AuthProvider>
