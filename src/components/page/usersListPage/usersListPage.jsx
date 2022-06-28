@@ -6,14 +6,14 @@ import SearchStatus from "../../ui/searchStatus";
 import UsersTable from "../../ui/usersTable";
 import _ from "lodash";
 import TextFields from "../../common/form/textFields";
-import { useUser } from "../../../hooks/useUser";
 import { useAuth } from "../../../hooks/useAuth";
 import { useSelector } from "react-redux";
 import { getProfessions, getProfessionsLoadingStatus } from "../../../store/professions";
+import { getUsersList } from "../../../store/users";
 
 const UsersListPage = () => {
   const pageSize = 8;
-  const { users } = useUser();
+  const users = useSelector(getUsersList());
   const { currentUser } = useAuth();
   const professions = useSelector(getProfessions());
   const professionsLoading = useSelector(getProfessionsLoadingStatus());
@@ -86,10 +86,10 @@ const UsersListPage = () => {
       <div className={"d-flex flex-column me-3"}>
         <div className={"d-flex p-3"}>
           {professions && !professionsLoading &&
-            <div className={"d-flex flex-column p-3"}>
-              <GroupList items={professions} selectedItem={selectedProf} onItemSelect={handleProfessionSelect}/>
-              <button className={"btn btn-secondary btn-sm m-1"} onClick={clearFilter}>Сброс</button>
-            </div>
+                <div className={"d-flex flex-column p-3"}>
+                  <GroupList items={professions} selectedItem={selectedProf} onItemSelect={handleProfessionSelect}/>
+                  <button className={"btn btn-secondary btn-sm m-1"} onClick={clearFilter}>Сброс</button>
+                </div>
           }
           <div className={"flex-grow-1"}>
             <SearchStatus length={count}/>
@@ -97,7 +97,8 @@ const UsersListPage = () => {
               onChange={handleSearch} name={"search"} value={search}
             />}
             {count > 0 && (
-              <UsersTable users={usersCrop} selectedSort={sortBy} onSort={handleSort} onToggleBookMark={handleToggleBookMark} />
+              <UsersTable users={usersCrop} selectedSort={sortBy} onSort={handleSort}
+                onToggleBookMark={handleToggleBookMark}/>
             )}
           </div>
         </div>
