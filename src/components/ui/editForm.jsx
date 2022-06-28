@@ -10,8 +10,9 @@ import { validator } from "../../utils/validator";
 import { validatorConfigEditForm } from "../../utils/errors";
 import ButtonHistoryBack from "../common/buttonHistoryBack";
 import { useProfessions } from "../../hooks/useProfession";
-import { useQualities } from "../../hooks/useQualities";
 import { useAuth } from "../../hooks/useAuth";
+import { useSelector } from "react-redux";
+import { getQualities, getQualitiesLoadingStatus } from "../../store/qualities";
 
 const EditForm = () => {
   const history = useHistory();
@@ -20,7 +21,8 @@ const EditForm = () => {
   const [errors, setErrors] = useState({});
   const [isLoading, setLoading] = useState(true);
   const { professions } = useProfessions();
-  const { qualities } = useQualities();
+  const qualities = useSelector(getQualities());
+  const qualitiesLoading = useSelector(getQualitiesLoadingStatus());
   const professionsList = getDataByLabel(professions);
   const qualitiesList = getQualitiesByLabel(qualities);
 
@@ -37,7 +39,7 @@ const EditForm = () => {
   }, [user]);
 
   useEffect(() => {
-    if (!!currentUser && !!qualities.length && !!professions.length) {
+    if (!!currentUser && !qualitiesLoading && !!professions.length) {
       setLoading(false);
     }
   }, [qualities, professions, currentUser]);

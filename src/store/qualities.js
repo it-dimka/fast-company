@@ -13,7 +13,7 @@ const qualitiesSlice = createSlice({
       state.isLoading = true;
     },
     qualitiesReceved: (state, action) => {
-      state = action.payload;
+      state.entities = action.payload;
       state.isLoading = false;
     },
     qualitiesRequestFiled: (state, action) => {
@@ -35,5 +35,11 @@ export const loadQualitiesList = () => async (dispatch) => {
     dispatch(qualitiesRequestFiled(error.message));
   }
 };
+
+export const getQualities = () => state => state.qualities.entities;
+
+export const getQualitiesLoadingStatus = () => state => state.qualities.isLoading;
+
+export const getQualityById = (id) => state => state.qualities.entities.find(q => q._id === id);
 
 export default qualitiesReducer;

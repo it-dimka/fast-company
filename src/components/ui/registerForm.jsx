@@ -8,10 +8,11 @@ import CheckBoxFields from "../common/form/CheckBoxFields";
 import { getDataByLabel, getQualitiesByLabel } from "../../utils/formatData";
 import { genderOptions } from "../../utils/genderOptions";
 import { validatorConfigRegisterForm } from "../../utils/errors";
-import { useQualities } from "../../hooks/useQualities";
 import { useProfessions } from "../../hooks/useProfession";
 import { useAuth } from "../../hooks/useAuth";
 import { useHistory } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { getQualities } from "../../store/qualities";
 
 const RegisterForm = () => {
   const history = useHistory();
@@ -26,7 +27,7 @@ const RegisterForm = () => {
   });
   const { signUp } = useAuth();
   const [errors, setErrors] = useState({});
-  const { qualities } = useQualities();
+  const qualities = useSelector(getQualities());
   const qualitiesList = getQualitiesByLabel(qualities);
   const { professions } = useProfessions();
   const professionsList = getDataByLabel(professions);

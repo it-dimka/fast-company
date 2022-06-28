@@ -8,7 +8,6 @@ import Users from "./layouts/users";
 import NotFound from "./layouts/notFound";
 import NavBar from "./components/ui/navBar";
 import ProfessionProvider from "./hooks/useProfession";
-import QualitiesProvider from "./hooks/useQualities";
 import AuthProvider from "./hooks/useAuth";
 import ProtectedRoute from "./components/common/protectedRoute";
 import LogOut from "./layouts/logOut";
@@ -19,7 +18,6 @@ const App = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    console.log("wow");
     dispatch(loadQualitiesList());
   }, []);
 
@@ -28,16 +26,14 @@ const App = () => {
       <AuthProvider>
         <NavBar />
         <ProfessionProvider>
-          <QualitiesProvider>
-            <Switch>
-              <ProtectedRoute path={"/users/:userId?/:edit?"} component={Users} />
-              <Route path={"/login/:type?"} component={Login} />
-              <Route path={"/logout"} component={LogOut} />
-              <Route exact path={"/"} component={Main} />
-              <Route path={"/404"} component={NotFound} />
-              <Redirect to={"/404"} />
-            </Switch>
-          </QualitiesProvider>
+          <Switch>
+            <ProtectedRoute path={"/users/:userId?/:edit?"} component={Users} />
+            <Route path={"/login/:type?"} component={Login} />
+            <Route path={"/logout"} component={LogOut} />
+            <Route exact path={"/"} component={Main} />
+            <Route path={"/404"} component={NotFound} />
+            <Redirect to={"/404"} />
+          </Switch>
         </ProfessionProvider>
       </AuthProvider>
       <ToastContainer />
