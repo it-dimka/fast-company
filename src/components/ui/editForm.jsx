@@ -9,10 +9,10 @@ import MultiSelectField from "../common/form/multiSelectField";
 import { validator } from "../../utils/validator";
 import { validatorConfigEditForm } from "../../utils/errors";
 import ButtonHistoryBack from "../common/buttonHistoryBack";
-import { useProfessions } from "../../hooks/useProfession";
 import { useAuth } from "../../hooks/useAuth";
 import { useSelector } from "react-redux";
 import { getQualities, getQualitiesLoadingStatus } from "../../store/qualities";
+import { getProfessions, getProfessionsLoadingStatus } from "../../store/professions";
 
 const EditForm = () => {
   const history = useHistory();
@@ -20,7 +20,8 @@ const EditForm = () => {
   const [user, setUser] = useState(currentUser);
   const [errors, setErrors] = useState({});
   const [isLoading, setLoading] = useState(true);
-  const { professions } = useProfessions();
+  const professions = useSelector(getProfessions());
+  const professionsLoading = useSelector(getProfessionsLoadingStatus());
   const qualities = useSelector(getQualities());
   const qualitiesLoading = useSelector(getQualitiesLoadingStatus());
   const professionsList = getDataByLabel(professions);
@@ -39,7 +40,7 @@ const EditForm = () => {
   }, [user]);
 
   useEffect(() => {
-    if (!!currentUser && !qualitiesLoading && !!professions.length) {
+    if (!!currentUser && !qualitiesLoading && !professionsLoading) {
       setLoading(false);
     }
   }, [qualities, professions, currentUser]);

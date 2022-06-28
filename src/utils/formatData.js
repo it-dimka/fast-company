@@ -1,4 +1,4 @@
-export const getProfessionById = (id, professions) => {
+export const getProfessionsById = (id, professions) => {
   for (const prof of professions) {
     if (prof?.value === id) {
       return { _id: prof?.value, name: prof?.label };
