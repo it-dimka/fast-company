@@ -2,6 +2,8 @@ import { createAction, createSlice } from "@reduxjs/toolkit";
 import usersService from "../services/users.service";
 import authService from "../services/auth.service";
 import localStorageService from "../services/localStorage.service";
+import { getRandomInt } from "../utils/randomInt";
+import history from "../utils/history";
 
 const usersSlice = createSlice({
   name: "users",
@@ -24,19 +26,27 @@ const usersSlice = createSlice({
       state.error = action.payload;
       state.isLoading = false;
     },
-    authRequestSuccess: (state, actions) => {
-      state.auth = { ...actions.payload, isLoggedIn: true };
+    authRequestSuccess: (state, action) => {
+      state.auth = { ...action.payload, isLoggedIn: true };
     },
-    authRequestFailed: (state, actions) => {
-      state.error = actions.payload;
+    authRequestFailed: (state, action) => {
+      state.error = action.payload;
+    },
+    userCreated: (state, action) => {
+      if (!Array.isArray(state.entities)) {
+        state.entities = [];
+      }
+      state.entities.push(action.payload);
     }
   }
 });
 
 const { reducer: usersReducer, actions } = usersSlice;
-const { usersRequested, usersReceved, usersRequestFiled, authRequestSuccess, authRequestFailed } = actions;
+const { usersRequested, usersReceved, usersRequestFiled, authRequestSuccess, authRequestFailed, userCreated } = actions;
 
 const authRequested = createAction("users/authRequested");
+const userCreateRequested = createAction("users/userCreateRequested");
+const createUserFailed = createAction("users/createUserFailed");
 
 export const signUp = ({ email, password, ...rest }) => async (dispatch) => {
   dispatch(authRequested());
@@ -44,10 +54,31 @@ export const signUp = ({ email, password, ...rest }) => async (dispatch) => {
     const data = await authService.register({ email, password });
     localStorageService.setToken(data);
     dispatch(authRequestSuccess({ userId: data.localId }));
+    dispatch(createUser({
+      _id: data.localId,
+      email,
+      rate: getRandomInt(1, 5),
+      completedMeetings: getRandomInt(1, 500),
+      image: `https://avatars.dicebear.com/api/avataaars/${(Math.random() + 1).toString(36).substring(7)}.svg`,
+      ...rest
+    }));
   } catch (error) {
     dispatch(authRequestFailed(error.message));
   }
 };
+
+function createUser(payload) {
+  return async function (dispatch) {
+    dispatch(userCreateRequested());
+    try {
+      const { content } = await usersService.create(payload);
+      dispatch(userCreated(content));
+      history.push("/users");
+    } catch (error) {
+      dispatch(createUserFailed());
+    }
+  };
+}
 
 export const loadUsersList = () => async (dispatch) => {
   dispatch(usersRequested());
