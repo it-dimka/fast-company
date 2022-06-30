@@ -13,10 +13,12 @@ import { useAuth } from "../../hooks/useAuth";
 import { useSelector } from "react-redux";
 import { getQualities, getQualitiesLoadingStatus } from "../../store/qualities";
 import { getProfessions, getProfessionsLoadingStatus } from "../../store/professions";
+import { getCurrentUserData } from "../../store/users";
 
 const EditForm = () => {
   const history = useHistory();
-  const { currentUser, updateUserData } = useAuth();
+  const currentUser = useSelector(getCurrentUserData());
+  const { updateUserData } = useAuth();
   const [user, setUser] = useState(currentUser);
   const [errors, setErrors] = useState({});
   const [isLoading, setLoading] = useState(true);
