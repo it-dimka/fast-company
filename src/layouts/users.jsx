@@ -1,33 +1,27 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Redirect, useParams } from "react-router-dom";
 import UserPage from "../components/page/userPage";
 import UsersListPage from "../components/page/usersListPage";
 import EditForm from "../components/ui/editForm";
-import { useAuth } from "../hooks/useAuth";
-import { useDispatch, useSelector } from "react-redux";
-import { getDataStatus, loadUsersList } from "../store/users";
+import UsersLoader from "../components/ui/hoc/usersLoader";
+import { useSelector } from "react-redux";
+import { getCurrentUserId } from "../store/users";
 
 const Users = () => {
   const { userId, edit } = useParams();
-  const { currentUser } = useAuth();
-  const dataStatus = useSelector(getDataStatus());
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    if (!dataStatus) dispatch(loadUsersList());
-  }, []);
-
-  if (!dataStatus) return "Loading...";
+  const currentUserId = useSelector(getCurrentUserId());
 
   return (
     <>
-      {userId
-        ? (edit
-          ? (userId === currentUser._id
-            ? (<EditForm/>)
-            : (<Redirect to={{ pathname: `/users/${currentUser._id}/edit` }} />))
-          : (<UserPage userId={userId} />))
-        : <UsersListPage />}
+      <UsersLoader>
+        {userId
+          ? (edit
+            ? (userId === currentUserId
+              ? (<EditForm/>)
+              : (<Redirect to={{ pathname: `/users/${currentUserId}/edit` }}/>))
+            : (<UserPage userId={userId}/>))
+          : <UsersListPage/>}
+      </UsersLoader>
     </>
   );
 };
