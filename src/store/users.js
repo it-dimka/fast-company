@@ -57,16 +57,32 @@ const usersSlice = createSlice({
       state.auth = null;
       state.isLoggedIn = false;
       state.dataLoaded = false;
+    },
+    currentUserUpdated: (state, action) => {
+      state.entities[
+        state.entities.findIndex((u) => u._id === action.payload._id)
+      ] = action.payload;
     }
   }
 });
 
 const { reducer: usersReducer, actions } = usersSlice;
-const { usersRequested, usersReceved, usersRequestFiled, authRequestSuccess, authRequestFailed, userCreated, userLoggedOut } = actions;
+const {
+  usersRequested,
+  usersReceved,
+  usersRequestFiled,
+  authRequestSuccess,
+  authRequestFailed,
+  userCreated,
+  userLoggedOut,
+  currentUserUpdated
+} = actions;
 
 const authRequested = createAction("users/authRequested");
 const userCreateRequested = createAction("users/userCreateRequested");
 const createUserFailed = createAction("users/createUserFailed");
+const updateCurrentUserRequested = createAction("users/updateCurrentUserRequested");
+const updateCurrentUserFailed = createAction("users/updateCurrentUserFailed");
 
 export const login = ({ payload, redirect }) => async (dispatch) => {
   const { email, password } = payload;
@@ -97,6 +113,17 @@ export const signUp = ({ email, password, ...rest }) => async (dispatch) => {
     }));
   } catch (error) {
     dispatch(authRequestFailed(error.message));
+  }
+};
+
+export const updateCurrentUserData = (payload) => async (dispatch) => {
+  dispatch(updateCurrentUserRequested());
+  try {
+    const { content } = await usersService.updateUserData(payload);
+    dispatch(currentUserUpdated(content));
+    history.replace(`/users/${content._id}`);
+  } catch (error) {
+    dispatch(updateCurrentUserFailed());
   }
 };
 

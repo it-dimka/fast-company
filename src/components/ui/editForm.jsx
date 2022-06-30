@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { useHistory } from "react-router-dom";
 import TextFields from "../common/form/textFields";
 import SelectField from "../common/form/selectField";
 import { getDataByLabel, getQualitiesByLabel } from "../../utils/formatData";
@@ -9,16 +8,14 @@ import MultiSelectField from "../common/form/multiSelectField";
 import { validator } from "../../utils/validator";
 import { validatorConfigEditForm } from "../../utils/errors";
 import ButtonHistoryBack from "../common/buttonHistoryBack";
-import { useAuth } from "../../hooks/useAuth";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getQualities, getQualitiesLoadingStatus } from "../../store/qualities";
 import { getProfessions, getProfessionsLoadingStatus } from "../../store/professions";
-import { getCurrentUserData } from "../../store/users";
+import { getCurrentUserData, updateCurrentUserData } from "../../store/users";
 
 const EditForm = () => {
-  const history = useHistory();
   const currentUser = useSelector(getCurrentUserData());
-  const { updateUserData } = useAuth();
+  const dispatch = useDispatch();
   const [user, setUser] = useState(currentUser);
   const [errors, setErrors] = useState({});
   const [isLoading, setLoading] = useState(true);
@@ -51,8 +48,7 @@ const EditForm = () => {
     e.preventDefault();
     const isValid = validate();
     if (!isValid) return;
-    updateUserData(user);
-    history.replace(`/users/${currentUser._id}`);
+    dispatch(updateCurrentUserData(user));
   };
 
   const handleChange = (target) => {
