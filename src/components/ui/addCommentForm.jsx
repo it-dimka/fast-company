@@ -3,8 +3,14 @@ import TextAreaField from "../common/form/textAreaField";
 import { validator } from "../../utils/validator";
 import { validatorConfigAddCommentForm } from "../../utils/errors";
 import PropTypes from "prop-types";
+import { nanoid } from "nanoid";
+import { useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { getCurrentUserId } from "../../store/users";
 
 const AddCommentForm = ({ onSubmit }) => {
+  const { userId } = useParams();
+  const currentUserId = useSelector(getCurrentUserId());
   const [data, setData] = useState({});
   const [errors, setErrors] = useState({});
 
@@ -28,7 +34,10 @@ const AddCommentForm = ({ onSubmit }) => {
     e.preventDefault();
     const isValid = validate();
     if (!isValid) return;
-    onSubmit(data);
+    const comment = {
+      ...data, _id: nanoid(), pageId: userId, created_at: Date.now(), userId: currentUserId
+    };
+    onSubmit(comment);
     clearForm();
   };
 
@@ -40,7 +49,8 @@ const AddCommentForm = ({ onSubmit }) => {
   return (
     <form onSubmit={handleSubmit}>
       <h2>New comment</h2>
-      <TextAreaField onChange={handleChange} name={"content"} value={data?.content || ""} error={errors.content} label={"Комментарий"} />
+      <TextAreaField onChange={handleChange} name={"content"} value={data?.content || ""} error={errors.content}
+        label={"Комментарий"}/>
       <div className={"d-flex justify-content-end"}>
         <button className={"btn btn-primary"}>Опубликовать</button>
       </div>
