@@ -4,12 +4,13 @@ import TextFields from "../common/form/textFields";
 import CheckBoxFields from "../common/form/CheckBoxFields";
 import { validatorConfigLoginForm } from "../../utils/errors";
 import { useHistory } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { login } from "../../store/users";
+import { useDispatch, useSelector } from "react-redux";
+import { getAuthErrors, login } from "../../store/users";
 
 const LoginForm = () => {
   const dispatch = useDispatch();
   const history = useHistory();
+  const loginError = useSelector(getAuthErrors());
   const [data, setData] = useState({ email: "", password: "", stayOn: false });
   const [errors, setErrors] = useState({});
 
@@ -46,6 +47,7 @@ const LoginForm = () => {
         value={data.password} error={errors?.password} placeholder={"Password"}
       />
       <CheckBoxFields value={data.stayOn} name={"stayOn"} onChange={handleChange}>Оставаться в системе</CheckBoxFields>
+      {loginError && <p className={"text-danger"}>{loginError}</p>}
       <button className={"btn btn-primary w-100 mx-auto mb-2"} type={"submit"} disabled={!isValid}>Submit</button>
     </form>
   );

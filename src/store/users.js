@@ -4,6 +4,7 @@ import authService from "../services/auth.service";
 import localStorageService from "../services/localStorage.service";
 import { getRandomInt } from "../utils/randomInt";
 import history from "../utils/history";
+import { generateAuthError } from "../utils/generateAuthError";
 
 const initialState = localStorageService.getAccessToken()
   ? {
@@ -39,6 +40,9 @@ const usersSlice = createSlice({
       state.error = action.payload;
       state.isLoading = false;
     },
+    authRequested: (state) => {
+      state.error = null;
+    },
     authRequestSuccess: (state, action) => {
       state.auth = action.payload;
       state.isLoggedIn = true;
@@ -71,6 +75,7 @@ const {
   usersRequested,
   usersReceved,
   usersRequestFiled,
+  authRequested,
   authRequestSuccess,
   authRequestFailed,
   userCreated,
@@ -78,7 +83,6 @@ const {
   currentUserUpdated
 } = actions;
 
-const authRequested = createAction("users/authRequested");
 const userCreateRequested = createAction("users/userCreateRequested");
 const createUserFailed = createAction("users/createUserFailed");
 const updateCurrentUserRequested = createAction("users/updateCurrentUserRequested");
@@ -93,7 +97,13 @@ export const login = ({ payload, redirect }) => async (dispatch) => {
     localStorageService.setToken(data);
     history.push(redirect);
   } catch (error) {
-    dispatch(authRequestFailed(error.message));
+    const { code, message } = error.response.data.error;
+    if (code === 400) {
+      const errorMessage = generateAuthError(message);
+      dispatch(authRequestFailed(errorMessage));
+    } else {
+      dispatch(authRequestFailed(error.message));
+    }
   }
 };
 
@@ -173,5 +183,7 @@ export const getCurrentUserData = () => state => {
 };
 
 export const getUsersLoadingStatus = () => state => state.users.isLoading;
+
+export const getAuthErrors = () => state => state.users.error;
 
 export default usersReducer;
